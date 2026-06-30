@@ -9,3 +9,5 @@ build/
 extract_links.py
 find_links.py
 find_links.js
+
+.vercel
