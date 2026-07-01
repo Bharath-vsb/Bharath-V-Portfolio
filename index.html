@@ -227,6 +227,126 @@ footer{padding:50px 6vw 30px;text-align:center;position:relative;z-index:2;}
   #navbar{gap:10px;padding:8px 14px;}
   #navbar a{font-size:11px;}
 }
+
+/* ===== Email Contact Modal ===== */
+.email-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.email-modal-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+.email-modal-card {
+  width: 90%;
+  max-width: 460px;
+  padding: 34px 28px;
+  border-radius: 24px;
+  position: relative;
+  transform: translateY(30px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+.email-modal-overlay.show .email-modal-card {
+  transform: translateY(0);
+}
+.email-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 26px;
+  cursor: none;
+  transition: color 0.3s;
+}
+.email-modal-close:hover {
+  color: var(--neon-blue);
+}
+.email-modal-header {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.email-modal-icon {
+  font-size: 38px;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 12px var(--neon-blue));
+}
+.email-modal-header h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--neon-blue), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.email-modal-header p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.copied-banner {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid var(--neon-blue);
+  color: var(--neon-blue);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  margin-top: 12px;
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+}
+.copied-banner.show {
+  opacity: 1;
+  transform: scale(1);
+}
+.email-modal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.email-opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  width: 100%;
+  text-align: left;
+  cursor: none;
+}
+.email-opt-btn:hover {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.2);
+  transform: translateY(-2px);
+}
+.opt-icon {
+  font-size: 16px;
+}
 </style>
 </head>
 <body>
@@ -439,7 +559,7 @@ footer{padding:50px 6vw 30px;text-align:center;position:relative;z-index:2;}
       <div class="form-row"><label>EMAIL</label><input type="email" placeholder="you@email.com" required></div>
       <div class="form-row"><label>MESSAGE</label><textarea placeholder="Tell me about the opportunity..." required></textarea></div>
       <button type="submit" class="btn btn-primary send-btn">Send Message ✦</button>
-      <div class="form-note">This form pre-fills an email to vbharathvsb@gmail.com in Gmail to bypass desktop apps.</div>
+      <div class="form-note">This form copies the recipient and opens an email compose helper with your message.</div>
     </form>
   </div>
 </section>
@@ -762,7 +882,100 @@ certs.forEach(c=>{
   certGrid.appendChild(card);
 });
 
-/* ===== Contact form handler (mailto redirect) ===== */
+/* ===== Custom Email Modal Control ===== */
+const emailModal = document.getElementById('email-modal');
+const emailModalClose = document.getElementById('email-modal-close-btn');
+const copiedBanner = document.getElementById('email-copied-banner');
+const emailOptGmail = document.getElementById('email-opt-gmail');
+const emailOptOutlook = document.getElementById('email-opt-outlook');
+const emailOptYahoo = document.getElementById('email-opt-yahoo');
+const emailOptMailto = document.getElementById('email-opt-mailto');
+const emailOptCopy = document.getElementById('email-opt-copy');
+const emailOptCopyMsg = document.getElementById('email-opt-copy-msg');
+const copyBtnText = document.getElementById('copy-btn-text');
+const copyMsgText = document.getElementById('copy-msg-text');
+
+let lastMessageText = '';
+
+function openEmailModal(subject = '', body = '') {
+  const emailTo = 'vbharathvsb@gmail.com';
+  
+  // Set URLs
+  const encSubject = encodeURIComponent(subject || 'Portfolio Inquiry');
+  const encBody = encodeURIComponent(body || 'Hi Bharath,');
+  
+  emailOptGmail.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailTo}&su=${encSubject}&body=${encBody}`;
+  emailOptOutlook.href = `https://outlook.live.com/default/?path=/mail/action/compose&to=${emailTo}&subject=${encSubject}&body=${encBody}`;
+  emailOptYahoo.href = `https://compose.mail.yahoo.com/?to=${emailTo}&subj=${encSubject}&body=${encBody}`;
+  emailOptMailto.href = `mailto:${emailTo}?subject=${encSubject}&body=${encBody}`;
+  
+  // Copy recipient address to clipboard automatically
+  navigator.clipboard.writeText(emailTo).then(() => {
+    copiedBanner.classList.add('show');
+    setTimeout(() => copiedBanner.classList.remove('show'), 4000);
+  }).catch(err => {
+    console.error('Failed to copy email: ', err);
+  });
+  
+  // Handle message body copy button visibility
+  if (body) {
+    lastMessageText = decodeURIComponent(body);
+    emailOptCopyMsg.style.display = 'flex';
+    copyMsgText.textContent = 'Copy Message Body';
+  } else {
+    emailOptCopyMsg.style.display = 'none';
+  }
+  
+  copyBtnText.textContent = 'Copy Email Address';
+  
+  emailModal.classList.add('show');
+}
+
+// Add mouseenter/mouseleave hover states for custom cursor ring
+emailModal.querySelectorAll('a, button').forEach(btn => {
+  btn.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  btn.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
+
+emailModalClose.addEventListener('click', () => {
+  emailModal.classList.remove('show');
+});
+
+emailModal.addEventListener('click', (e) => {
+  if (e.target === emailModal) {
+    emailModal.classList.remove('show');
+  }
+});
+
+emailOptCopy.addEventListener('click', () => {
+  navigator.clipboard.writeText('vbharathvsb@gmail.com').then(() => {
+    copyBtnText.textContent = 'Copied! ✓';
+    setTimeout(() => {
+      copyBtnText.textContent = 'Copy Email Address';
+    }, 2000);
+  });
+});
+
+emailOptCopyMsg.addEventListener('click', () => {
+  if (lastMessageText) {
+    navigator.clipboard.writeText(lastMessageText).then(() => {
+      copyMsgText.textContent = 'Message Copied! ✓';
+      setTimeout(() => {
+        copyMsgText.textContent = 'Copy Message Body';
+      }, 2000);
+    });
+  }
+});
+
+// Intercept all mailto links on the page to open this modal instead
+document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    openEmailModal('', '');
+  });
+});
+
+/* ===== Contact form handler (custom modal popup) ===== */
 document.getElementById('contact-form').addEventListener('submit', e => {
   e.preventDefault();
   const name = e.target.querySelector('input[placeholder="Your name"]').value;
@@ -771,23 +984,19 @@ document.getElementById('contact-form').addEventListener('submit', e => {
   
   const btn = e.target.querySelector('button');
   const origText = btn.innerHTML;
-  btn.innerHTML = 'Opening Gmail... ✉';
+  btn.innerHTML = 'Preparing Contact Options... ✉';
   
-  // Construct mail parameters
-  const subject = encodeURIComponent(`Portfolio Contact from ${name}`);
-  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+  const subject = `Portfolio Contact from ${name}`;
+  const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
   
   setTimeout(() => {
-    // Open Gmail Web Compose in a new tab to bypass desktop Outlook
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=vbharathvsb@gmail.com&su=${subject}&body=${body}`;
-    window.open(gmailUrl, '_blank');
-    
-    btn.innerHTML = 'Success! Opened Gmail ✓';
+    openEmailModal(subject, body);
+    btn.innerHTML = 'Success! Opened Options ✓';
     setTimeout(() => {
       btn.innerHTML = origText;
       e.target.reset();
     }, 2500);
-  }, 800);
+  }, 600);
 });
 
 /* ===== Resume download buttons configured directly in HTML hrefs ===== */
@@ -795,5 +1004,45 @@ document.getElementById('contact-form').addEventListener('submit', e => {
 /* Fallback in case load takes long / JS errors: never trap user behind loader */
 window.addEventListener('load',()=>{ setTimeout(()=>{document.getElementById('loader').classList.add('hide'); revealAll();},6000); });
 </script>
+
+<!-- Custom Email Contact Modal -->
+<div id="email-modal" class="email-modal-overlay">
+  <div class="glass email-modal-card">
+    <button class="email-modal-close" id="email-modal-close-btn">&times;</button>
+    <div class="email-modal-header">
+      <div class="email-modal-icon">✉️</div>
+      <h3>Send Email</h3>
+      <p>Choose your preferred email client or copy details to send manually.</p>
+      <div class="copied-banner" id="email-copied-banner">✓ vbharathvsb@gmail.com copied!</div>
+    </div>
+    <div class="email-modal-options">
+      <a href="#" id="email-opt-gmail" target="_blank" class="email-opt-btn">
+        <span class="opt-icon">📧</span>
+        <span class="opt-text">Gmail (Web)</span>
+      </a>
+      <a href="#" id="email-opt-outlook" target="_blank" class="email-opt-btn">
+        <span class="opt-icon">💻</span>
+        <span class="opt-text">Outlook / Live (Web)</span>
+      </a>
+      <a href="#" id="email-opt-yahoo" target="_blank" class="email-opt-btn">
+        <span class="opt-icon">🟣</span>
+        <span class="opt-text">Yahoo Mail (Web)</span>
+      </a>
+      <a href="#" id="email-opt-mailto" target="_blank" class="email-opt-btn">
+        <span class="opt-icon">✉️</span>
+        <span class="opt-text">Default Mail App</span>
+      </a>
+      <button id="email-opt-copy" class="email-opt-btn">
+        <span class="opt-icon">📋</span>
+        <span class="opt-text" id="copy-btn-text">Copy Email Address</span>
+      </button>
+      <button id="email-opt-copy-msg" class="email-opt-btn" style="display: none;">
+        <span class="opt-icon">📝</span>
+        <span class="opt-text" id="copy-msg-text">Copy Message Body</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
