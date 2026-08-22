@@ -254,7 +254,7 @@ footer{padding:50px 6vw 30px;text-align:center;position:relative;z-index:2;}
   <a href="#experience" class="nav-link">Experience</a>
   <a href="#achievements" class="nav-link">Achievements</a>
   <a href="#contact" class="nav-link">Contact</a>
-  <a href="Bharath_V_VSBEC_RESUME.pdf" id="nav-resume" download="Bharath_V_VSBEC_RESUME.pdf">Resume ↓</a>
+  <a href="V_BHARATH_VSBEC.pdf" id="nav-resume" download="V_BHARATH_VSBEC.pdf">Resume ↓</a>
 </nav>
 
 <main>
@@ -268,12 +268,12 @@ footer{padding:50px 6vw 30px;text-align:center;position:relative;z-index:2;}
       <div class="hero-role"><span id="typed"></span><span class="cursor-blink">&nbsp;</span></div>
       <p class="hero-desc">Driven final-year Computer Science (AI &amp; ML) undergraduate specializing in Artificial Intelligence and Machine Learning, with hands-on experience developing full-stack web applications and AI/ML solutions.</p>
       <div class="hero-btns">
-        <a href="Bharath_V_VSBEC_RESUME.pdf" class="btn btn-primary" id="hero-download" download="Bharath_V_VSBEC_RESUME.pdf">⬇ Download Resume</a>
+        <a href="V_BHARATH_VSBEC.pdf" class="btn btn-primary" id="hero-download" download="V_BHARATH_VSBEC.pdf">⬇ Download Resume</a>
         <a href="#projects" class="btn btn-ghost">View Projects</a>
         <a href="#contact" class="btn btn-ghost">Hire Me</a>
       </div>
       <div class="hero-stats">
-        <div><span class="num">5+</span><span class="lbl">PROJECTS SHIPPED</span></div>
+        <div><span class="num">4+</span><span class="lbl">PROJECTS SHIPPED</span></div>
         <div><span class="num">2</span><span class="lbl">INTERNSHIPS</span></div>
         <div><span class="num">6</span><span class="lbl">CERTIFICATIONS</span></div>
         <div><span class="num">8.25</span><span class="lbl">CGPA / 10</span></div>
@@ -344,7 +344,7 @@ footer{padding:50px 6vw 30px;text-align:center;position:relative;z-index:2;}
 <section id="projects">
   <div class="eyebrow">03 — Projects</div>
   <h2 class="section-title reveal">Things I've <span class="accent">shipped</span></h2>
-  <p class="section-sub reveal">Five projects spanning computer vision, full-stack platforms, and applied algorithms.</p>
+  <p class="section-sub reveal">Four projects spanning full-stack platforms, applied algorithms, and real-world solutions.</p>
   <div class="projects-grid" id="projects-grid"></div>
 </section>
 
@@ -679,16 +679,6 @@ window.addEventListener('scroll',()=>{
 /* ===== Projects data ===== */
 const projects=[
   {
-    title: "AI-Based Traffic Management System",
-    bullets: [
-      "Designed and implemented a real-time vehicle detection pipeline using YOLO object detection to identify vehicle density across multiple traffic lanes.",
-      "Applied a Genetic Algorithm to dynamically optimize traffic signal timings based on live vehicle counts, reducing simulated wait times."
-    ],
-    tech: ["Python", "YOLO", "TypeScript", "React", "CSS", "Supabase", "Gemini API"],
-    icon: "🚦",
-    github: "https://github.com/Bharath-vsb/AI-Based-Traffic-management-System"
-  },
-  {
     title: "Online Medication & Prescription Tracker",
     bullets: [
       "Developed a web application that digitizes prescription records, enabling patients to access their medication history from any device.",
@@ -696,17 +686,19 @@ const projects=[
     ],
     tech: ["HTML", "CSS", "JavaScript", "Python", "SQLite"],
     icon: "💊",
-    github: "https://github.com/Bharath-vsb/Online-Medication-Prescription-Tracker"
+    github: "https://github.com/Bharath-vsb/Online-Medication-Prescription-Tracker",
+    demo: "https://online-medication-prescription-tracker-production.up.railway.app/"
   },
   {
-    title: "Smart Recruiter",
+    title: "FixIt — Campus Management System",
     bullets: [
-      "Built a recruitment management portal to streamline candidate applications, shortlisting, and interview scheduling.",
-      "Implemented search and filter functionality for HR teams to quickly identify qualified candidates based on skills and experience."
+    "Developed a full-stack campus management system with role-based authentication for Students, Staff, and Admins, supporting campus issue reporting, resolution tracking, and staff management.",
+    "Implemented evidence-based issue resolution with photo uploads for students and staff, along with admin-controlled staff approval and account management."
     ],
-    tech: ["HTML", "CSS", "JavaScript", "Python", "SQLite"],
-    icon: "🧑‍💼",
-    github: "https://github.com/Bharath-vsb/SMART-RECRUITER"
+    tech: ["React", "TypeScript", "ASP.NET Core", "C#", "PostgreSQL", "Entity Framework Core", "JWT", "Docker", "Cloudinary", "Render"],
+    icon: "🛠️",
+    github: "https://github.com/Bharath-vsb/FixIt--Campus-Management-Systen",
+    demo: "https://fixit-frontend-ednk.onrender.com/login"
   },
   {
     title: "Debugging Contest Platform",
@@ -719,14 +711,15 @@ const projects=[
     github: "https://github.com/Bharath-vsb/Debugging_contest"
   },
   {
-    title: "Reva's Trendz Billing System",
+    title: "Retail Billing System with Inventory Management",
     bullets: [
-      "Developed a point-of-sale billing application for retail business, handling product inventory, customer billing, and transaction history.",
-      "Implemented invoice generation with itemized breakdowns, discount management, and daily sales summary reports."
+    "Developed a full-stack retail billing and inventory management system with role-based authentication, POS billing, product and stock management, customer management, supplier management, and purchase order workflows.",
+    "Implemented real-time inventory tracking with low-stock alerts, QR/barcode generation, print-ready invoice generation, sales analytics, and automated purchase-order email communication."
     ],
-    tech: ["HTML", "CSS", "JavaScript", "Python", "SQLite"],
-    icon: "🧾",
-    github: "https://github.com/Bharath-vsb/REVA-S-TRENDZ-BILLING-SYSTEM"
+    tech: ["React", "JavaScript", "CSS", "Node.js", "Express.js", "MySQL", "JWT", "Nodemailer"],
+    icon: "🛒",
+    github: "https://github.com/Bharath-vsb/Retail-Billing-System-with-Inventory-Management",
+    demo: "https://retail-billing-system-with-inventory-management-production.up.railway.app/"
   }
 ];
 const projGrid=document.getElementById('projects-grid');
@@ -741,7 +734,7 @@ projects.forEach(p=>{
         ${p.bullets.map(b => `<li>${b}</li>`).join('')}
       </ul>
       <div class="tech-tags" style="margin-top: auto;">${p.tech.map(t=>`<span>${t}</span>`).join('')}</div>
-      <div class="project-links" style="margin-top: 12px;"><a href="${p.github}" target="_blank">⌥ GitHub</a></div>
+      <div class="project-links" style="margin-top: 12px;"><a href="${p.github}" target="_blank">⌥ GitHub</a>${p.demo ? `<a href="${p.demo}" target="_blank" style="background:linear-gradient(90deg,var(--neon-blue),var(--purple));color:#000;font-weight:600;border-radius:20px;padding:4px 14px;font-size:12px;">🚀 Live Demo</a>` : ''}</div>
     </div>`;
   projGrid.appendChild(card);
 });
